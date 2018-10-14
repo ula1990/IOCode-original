@@ -82,6 +82,7 @@ class TutotrialVC: UIViewController {
         view.addSubview(activityIndicator)
         noDataLabel.isHidden = true
         
+        
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.font.rawValue: UIFont(name: "AppleSDGothicNeo-Light", size: 15) ?? UIFont.systemFont(ofSize: 15)]
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue:UIColor.gray]
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search..", attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])

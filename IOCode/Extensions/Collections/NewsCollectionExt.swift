@@ -72,4 +72,9 @@ extension NewsVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
             newsCollection.reloadData()
         }
     }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
+        isSearching = false
+        self.searchBar.endEditing(true)
+    }
 }

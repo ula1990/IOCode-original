@@ -74,6 +74,8 @@ class NewsDetailsVC: UIViewController {
         
         ])
     }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavBar()

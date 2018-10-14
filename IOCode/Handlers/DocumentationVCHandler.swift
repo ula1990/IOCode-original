@@ -11,6 +11,10 @@ import UIKit
 
 extension DocumentationVC {
     
+    @objc public func finishedWithInput (){
+        view.endEditing(true)
+    }
+    
     public func creatListOfElemnts() -> [UiElement]{
         var tempArray = [UiElement]()
         

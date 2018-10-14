@@ -11,6 +11,10 @@ import UIKit
 
 extension TutotrialVC {
     
+    @objc public func finishedWithInput (){
+        view.endEditing(true)
+    }
+    
     @objc public func reload(){
         loadTutorial(apiKey: apiKey)
     }

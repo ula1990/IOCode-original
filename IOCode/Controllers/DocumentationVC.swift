@@ -50,6 +50,16 @@ class DocumentationVC: UIViewController {
 
     }
     
+    fileprivate func toolBarSetup() {
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.finishedWithInput))
+        doneButton.tintColor = .black
+        toolBar.setItems([flexibleSpace, doneButton], animated: true)
+        searchBar.inputAccessoryView = toolBar
+    }
+    
    
     
     fileprivate func setupView(){
@@ -115,6 +125,7 @@ class DocumentationVC: UIViewController {
         super.viewDidLoad()
         setupNavBar()
         setupView()
+        toolBarSetup()
         uiCollection.delegate = self
         uiCollection.dataSource = self
         listOfElements = creatListOfElemnts()

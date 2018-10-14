@@ -12,6 +12,10 @@ import FirebaseFirestore
 
 extension NewsVC {
     
+    @objc public func finishedWithInput (){
+        view.endEditing(true)
+    }
+    
     @objc public func observeArticles(){
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()

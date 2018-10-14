@@ -51,6 +51,16 @@ class NewsVC: UIViewController {
         navigationController?.navigationBar.tintColor = .black
     }
     
+    fileprivate func toolBarSetup() {
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.finishedWithInput))
+        doneButton.tintColor = .black
+        toolBar.setItems([flexibleSpace, doneButton], animated: true)
+        searchBar.inputAccessoryView = toolBar
+    }
+    
     fileprivate func setupView(){
         view.backgroundColor = .white
         view.addSubview(searchBar)
@@ -95,6 +105,7 @@ class NewsVC: UIViewController {
         super.viewDidLoad()
         setupView()
         setupNavBar()
+        toolBarSetup()
         newsCollection.delegate = self
         newsCollection.dataSource = self
         db = Firestore.firestore()

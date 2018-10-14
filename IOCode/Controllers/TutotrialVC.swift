@@ -62,6 +62,16 @@ class TutotrialVC: UIViewController {
         navigationController?.navigationBar.tintColor = .black
     }
     
+    fileprivate func toolBarSetup() {
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.finishedWithInput))
+        doneButton.tintColor = .black
+        toolBar.setItems([flexibleSpace, doneButton], animated: true)
+        searchBar.inputAccessoryView = toolBar
+    }
+    
     fileprivate func setupView(){
         view.addSubview(searchBar)
         view.addSubview(detailsView)
@@ -133,6 +143,7 @@ class TutotrialVC: UIViewController {
         tutorialCollection.dataSource = self
         setupNavBar()
         setupView()
+        toolBarSetup()
         searchBar.returnKeyType = UIReturnKeyType.done
         searchBar.delegate = self
     }

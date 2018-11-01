@@ -67,7 +67,7 @@ class NewsDetailsVC: UIViewController {
         descriptionText.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
         descriptionText.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             
-        linkButton.bottomAnchor.constraint(equalTo: articleImage.bottomAnchor, constant: -40),
+        linkButton.bottomAnchor.constraint(equalTo: articleImage.bottomAnchor, constant: -10),
         linkButton.rightAnchor.constraint(equalTo: articleImage.rightAnchor, constant: -10),
         linkButton.heightAnchor.constraint(equalToConstant: 25),
         linkButton.widthAnchor.constraint(equalToConstant: 25)

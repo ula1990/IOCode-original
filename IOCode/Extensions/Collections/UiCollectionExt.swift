@@ -74,4 +74,9 @@ extension DocumentationVC: UICollectionViewDelegate, UICollectionViewDataSource,
             uiCollection.reloadData()
         }
     }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
+        isSearching = false
+        self.searchBar.endEditing(true)
+    }
 }

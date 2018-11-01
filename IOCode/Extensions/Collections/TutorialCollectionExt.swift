@@ -72,4 +72,9 @@ extension TutotrialVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
             tutorialCollection.reloadData()
         }
     }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
+        isSearching = false
+        self.searchBar.endEditing(true)
+    }
 }

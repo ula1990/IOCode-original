@@ -69,7 +69,7 @@ extension AddNewsVC: UITextFieldDelegate {
         if content.isEmpty{
             throw ArticleError.emtpyContent
         }
-        let newArticle = Article(title: title, description: description, url: url, urlToImage: imageUrl,content: content, approved: false, date: getTodayDate())
+        let newArticle = Article(title: title, description: description, url: url, urlToImage: imageUrl,content: content, approved: true, date: getTodayDate())
         let deviceRef = db.collection("articles")
                 deviceRef.document().setData(newArticle.dictionary){ err in
                     if err != nil {

@@ -17,6 +17,7 @@ extension NewsVC {
     }
     
     @objc public func observeArticles(){
+        
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         db.collection("articles").getDocuments(){
@@ -24,8 +25,6 @@ extension NewsVC {
             if let error = error {
                 print("\(error.localizedDescription)")
             }else{
-                self.listOfArticle.removeAll()
-                self.newsCollection.reloadData()
                 self.listOfArticle = QuerySnapshot!.documents.compactMap({Article(dictionary: $0.data())}).sorted(by: {$1.date < $0.date}).filter({$0.approved == true})
                 DispatchQueue.main.async {
                     self.newsCollection.reloadData()
@@ -47,11 +46,11 @@ extension NewsVC {
                         if Article(dictionary: diff.document.data()) != nil && Article(dictionary: diff.document.data())?.approved == true{
                             self.listOfArticle.append(Article(dictionary: diff.document.data())!)
                             self.listOfArticle.sort(by: {$1.date < $0.date})
+                            DispatchQueue.main.async {
+                                self.newsCollection.reloadData()
+                            }
                         }else{
                             print(error?.localizedDescription ?? "Error")
-                        }
-                        DispatchQueue.main.async {
-                            self.newsCollection.reloadData()
                         }
                     }
                     if diff.type == .removed {

@@ -119,7 +119,7 @@ class NewsVC: UIViewController {
         observeArticles()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        newsCollection.reloadData()
-    }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        newsCollection.reloadData()
+//    }
 }

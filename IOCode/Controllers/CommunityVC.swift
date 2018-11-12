@@ -33,11 +33,11 @@ class CommunityVC: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.barTintColor = .white
-        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont(name: "AppleSDGothicNeo-Regular", size: 30) ?? UIFont.systemFont(ofSize: 30)]
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black,.font: UIFont(name: "AppleSDGothicNeo-Regular", size: 20) ?? UIFont.systemFont(ofSize: 20)]
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont(name: "Chalkduster", size: 30) ?? UIFont.systemFont(ofSize: 30)]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black,.font: UIFont(name: "Chalkduster", size: 20) ?? UIFont.systemFont(ofSize: 20)]
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named:"about"), style: .plain, target: self, action: #selector(handleAbout))
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(named: "tabBarColor")
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "tabBarColor")
+        navigationItem.leftBarButtonItem?.tintColor = UIColor.darkGray
+        navigationItem.rightBarButtonItem?.tintColor = UIColor.darkGray
         navigationController?.navigationBar.tintColor = .black
     }
     

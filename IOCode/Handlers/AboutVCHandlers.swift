@@ -12,7 +12,7 @@ import UIKit
 extension AboutVC {
     @objc public func openButtonUrl(urlStr:String!) {
         if let url = NSURL(string:urlStr) {
-            UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+            UIApplication.shared.open(url as URL, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         }
     }
     
@@ -27,4 +27,9 @@ extension AboutVC {
     @objc public func handleSlack(){
         openButtonUrl(urlStr: "https://iosdeveloperula.slack.com/")
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

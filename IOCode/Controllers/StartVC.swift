@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 import Firebase
+import Lottie
 
 class StartVC: UIViewController {
     
@@ -27,19 +28,16 @@ class StartVC: UIViewController {
     lazy var titleLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
-        label.font = UIFont(name: "AppleSDGothicNeo-UltraLight", size: 50)
+        label.textColor = .black
+        label.font = UIFont(name: "Chalkduster", size: 50)
         label.textAlignment = .center
         label.text = "IOCode"
-        label.shadowColor = UIColor.black.withAlphaComponent(0.5)
-        label.layer.shadowColor = UIColor.black.cgColor
+        label.shadowColor = UIColor.white.withAlphaComponent(0.5)
+        label.layer.shadowColor = UIColor.white.cgColor
         label.layer.shadowRadius = 1
         label.layer.shadowOpacity = 0.1
         return label
     }()
-    
-    let backgroundImage = MainImageView(imageName: "backgroundColor")
-    let lampImage = MainImageView(imageName: "lamp")
     
     let inputsContainerView: UIView  = {
         let view = UIView()
@@ -55,7 +53,7 @@ class StartVC: UIViewController {
         button.backgroundColor =  UIColor.white.withAlphaComponent(0)
         button.setTitle("Register", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitleColor(UIColor.darkGray, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         button.addTarget(self, action: #selector(handleLoginregister), for: .touchUpInside)
         button.layer.cornerRadius = 5
@@ -75,7 +73,7 @@ class StartVC: UIViewController {
     lazy var loginRegisterSegmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Login", "Register"])
         sc.translatesAutoresizingMaskIntoConstraints = false
-        sc.tintColor = UIColor.white.withAlphaComponent(1)
+        sc.tintColor = UIColor.darkGray
         sc.selectedSegmentIndex = 1
         sc.addTarget(self, action: #selector(handleLoginRegisterChange), for: .valueChanged)
         return sc
@@ -85,32 +83,37 @@ class StartVC: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Forgot password?", for: .normal)
-        button.setTitleColor(UIColor(named: "system"), for: .normal)
-        button.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Light", size: 12)
-        button.titleLabel?.textColor = UIColor.white.withAlphaComponent(0.5)
+        button.setTitleColor(UIColor.darkGray, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
         return button
+    }()
+    
+    lazy var mainIcon: LOTAnimationView = {
+        let view = LOTAnimationView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.setAnimation(named: "personal_character")
+        view.loopAnimation = true
+        view.play()
+        return view
     }()
 
     lazy var privacyButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Privacy Policy", for: .normal)
-        button.setTitleColor(UIColor(named: "system"), for: .normal)
-        button.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Light", size: 12)
-        button.titleLabel?.textColor = UIColor.white.withAlphaComponent(0.5)
+        button.setTitleColor(UIColor.darkGray, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 11)
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(handlePrivacy), for: .touchUpInside)
         return button
     }()
     
-    let versionLabel = MainLabel(text: "", size: 12, textAligment: .center)
+    let versionLabel = MainLabel(text: "", size: 11, textAligment: .center)
     
     fileprivate func setupView(){
-        
-        view.addSubview(backgroundImage)
-        view.addSubview(lampImage)
+        view.backgroundColor = .white
         view.addSubview(titleLabel)
         view.addSubview(loginRegisterSegmentedControl)
         view.addSubview(inputsContainerView)
@@ -121,33 +124,18 @@ class StartVC: UIViewController {
         view.addSubview(forgotPasswordButton)
         view.addSubview(privacyButton)
         view.addSubview(versionLabel)
-        versionLabel.textColor = .white
+        view.addSubview(mainIcon)
         versionLabel.text = getVersion()
-        lampImage.contentMode = .scaleAspectFit
 
         titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         titleLabel.bottomAnchor.constraint(equalTo: loginRegisterSegmentedControl.topAnchor, constant: -5).isActive = true
         titleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30).isActive = true
         titleLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: lampImage.centerYAnchor, constant: -20).isActive = true
-        
-        
-        backgroundImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        backgroundImage.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        backgroundImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backgroundImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        backgroundImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
-        lampImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        lampImage.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        lampImage.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        lampImage.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        lampImage.bottomAnchor.constraint(equalTo: loginRegisterSegmentedControl.topAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100).isActive = true
         
         loginRegisterSegmentedControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loginRegisterSegmentedControl.bottomAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: -12).isActive = true
-        loginRegisterSegmentedControl.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
+        loginRegisterSegmentedControl.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor, constant: 20).isActive = true
         loginRegisterSegmentedControl.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
         inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -165,8 +153,7 @@ class StartVC: UIViewController {
         emailTextField.delegate = self
         emailTextField.autocapitalizationType = .none
         passwordTextField.delegate = self
-        
-        
+
         nameTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
         nameTextField.topAnchor.constraint(equalTo: inputsContainerView.topAnchor).isActive = true
         nameTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
@@ -182,7 +169,7 @@ class StartVC: UIViewController {
         nameSeparatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive = true
         nameSeparatorView.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
         nameSeparatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        nameSeperatorHeightAnchor = nameSeparatorView.heightAnchor.constraint(equalToConstant: 1)
+        nameSeperatorHeightAnchor = nameSeparatorView.heightAnchor.constraint(equalToConstant: 0.5)
         nameSeperatorHeightAnchor?.isActive = true
         
         emailTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
@@ -199,7 +186,7 @@ class StartVC: UIViewController {
         emailSeparatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive = true
         emailSeparatorView.topAnchor.constraint(equalTo: emailTextField.bottomAnchor).isActive = true
         emailSeparatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        emailSeparatorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        emailSeparatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         
         passwordTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
         passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor).isActive = true
@@ -215,20 +202,25 @@ class StartVC: UIViewController {
         loginRegisterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loginRegisterButton.topAnchor.constraint(equalTo: inputsContainerView.bottomAnchor, constant: 12).isActive = true
         loginRegisterButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        loginRegisterButton.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        loginRegisterButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         forgotPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        forgotPasswordButton.topAnchor.constraint(equalTo: loginRegisterButton.bottomAnchor, constant: 12).isActive = true
+        forgotPasswordButton.topAnchor.constraint(equalTo: loginRegisterButton.bottomAnchor, constant: 5).isActive = true
         forgotPasswordButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        forgotPasswordButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        forgotPasswordButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
-        privacyButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        privacyButton.bottomAnchor.constraint(equalTo: versionLabel.topAnchor, constant: -20).isActive = true
+        mainIcon.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 20).isActive = true
+        mainIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        mainIcon.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        mainIcon.widthAnchor.constraint(equalToConstant: 150).isActive = true
+
+        privacyButton.heightAnchor.constraint(equalToConstant: 15).isActive = true
+        privacyButton.bottomAnchor.constraint(equalTo: versionLabel.topAnchor, constant: -10).isActive = true
         privacyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         privacyButton.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         privacyButton.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
-        versionLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        versionLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
         versionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
         versionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         versionLabel.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true

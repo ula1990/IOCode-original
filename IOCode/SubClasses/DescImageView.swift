@@ -1,28 +1,27 @@
 //
-//  ImageCacheExt.swift
-//  IOCode
+//  DescImageView.swift
+//  DN News
 //
-//  Created by Uladzislau Daratsiuk on 9/12/18.
+//  Created by Uladzislau Daratsiuk on 11/7/18.
 //  Copyright © 2018 Uladzislau Daratsiuk. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-class NewsImageView: UIImageView {
-    
+class DescImageView: UIImageView {
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.layer.masksToBounds = true
-        self.layer.cornerRadius = 10
+//        self.layer.cornerRadius = 5
         self.layer.shadowColor = UIColor.black.cgColor
         self.layer.shadowOffset = CGSize(width: 1, height: 5)
         self.layer.shadowRadius = 8
         self.layer.shadowOpacity = 0.2
         self.layer.shouldRasterize = true
         self.layer.rasterizationScale = UIScreen.main.scale
-        self.contentMode = .scaleToFill
+        self.contentMode = .scaleAspectFill
         self.image = UIImage(named: "noImage")
     }
     
@@ -58,4 +57,5 @@ class NewsImageView: UIImageView {
                 }.resume()
         }
     }
+
 }

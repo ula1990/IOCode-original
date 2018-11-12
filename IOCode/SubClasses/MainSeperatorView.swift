@@ -12,7 +12,7 @@ class MainSeperatorView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.white.withAlphaComponent(1)
+        self.backgroundColor = UIColor.darkGray.withAlphaComponent(1)
         self.translatesAutoresizingMaskIntoConstraints = false
     }
     

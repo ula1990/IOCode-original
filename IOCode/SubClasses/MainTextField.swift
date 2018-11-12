@@ -13,11 +13,11 @@ class MainTextField: UITextField {
     init(placeHolderText: String, isSecure: Bool) {
         super.init(frame: .zero)
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.textColor = UIColor.white
+        self.textColor = UIColor.darkGray
         self.textAlignment = .left
         self.isSecureTextEntry = isSecure
-        self.attributedPlaceholder = NSAttributedString(string: placeHolderText,attributes: [NSAttributedStringKey.foregroundColor: UIColor.white.withAlphaComponent(0.8)])
-        self.font = UIFont(name: "AppleSDGothicNeo-Light", size: 15)
+        self.attributedPlaceholder = NSAttributedString(string: placeHolderText,attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkGray.withAlphaComponent(0.8)])
+        self.font = UIFont.systemFont(ofSize: 14)
         self.returnKeyType = UIReturnKeyType.done
     }
     

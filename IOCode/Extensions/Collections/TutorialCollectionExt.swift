@@ -37,11 +37,15 @@ extension TutotrialVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
         let cell = tutorialCollection.dequeueReusableCell(withReuseIdentifier: tutorialCellId, for: indexPath) as! TutorialCell
         if isSearching{
             tutorial = filtredTutorials[indexPath.row]
+            cell.updateData(tutorial: tutorial)
         }else{
-            tutorial = tutorialList[indexPath.row]
+            if !tutorialList.isEmpty{
+                tutorial = tutorialList[indexPath.row]
+                cell.updateData(tutorial: tutorial)
+            }
         }
         cell.backgroundColor = UIColor.white.withAlphaComponent(0)
-        cell.updateData(tutorial: tutorial)
+        
         return cell
     }
     
@@ -52,7 +56,7 @@ extension TutotrialVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: view.frame.width - 40, height: 60)
+        return CGSize(width: view.frame.width - 40, height: 140)
     }
     
     
@@ -76,5 +80,25 @@ extension TutotrialVC: UICollectionViewDelegate, UICollectionViewDataSource, UIC
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar){
         isSearching = false
         self.searchBar.endEditing(true)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+      
+        if offsetY > contentHeight - scrollView.frame.height - 50 {
+            // Bottom of the screen is reached
+            if !fetchingMore {
+                loadTutorial(apiKey: apiKey)
+            }
+        }else if offsetY < -100 {
+            self.tutorialList.removeAll()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                if !self.fetchingMore {
+                    self.loadTutorial(apiKey: self.apiKey)
+                }
+                
+            })
+        }
     }
 }

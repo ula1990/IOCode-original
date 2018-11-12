@@ -16,7 +16,7 @@ class LoginFieldsImage: UIImageView {
         self.image = UIImage(named: imageName)
         self.contentMode = .scaleAspectFit
         self.clipsToBounds = true
-        self.tintColor = UIColor.white.withAlphaComponent(1)
+        self.tintColor = UIColor.darkGray.withAlphaComponent(1)
         
     }
     

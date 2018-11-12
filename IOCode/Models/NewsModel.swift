@@ -21,6 +21,8 @@ struct Article {
     var content: String
     var approved: Bool
     var date: String
+    var id: Int
+    var dateSystem: Date
     
     var dictionary:[String:Any] {
         return [
@@ -30,7 +32,9 @@ struct Article {
             "urlToImage": urlToImage,
             "content": content,
             "approved": approved,
-            "date": date
+            "date": date,
+            "id": id,
+            "dateSystem": dateSystem
         ]
     }
     
@@ -44,7 +48,9 @@ extension Article: DocumentArticleSerializable {
             let urlToImage = dictionary["urlToImage"] as? String,
             let content = dictionary["content"] as? String,
             let approved = dictionary["approved"] as? Bool,
-            let date = dictionary["date"] as? String else {return nil}
-        self.init(title: title, description: description, url: url, urlToImage: urlToImage,content: content, approved: approved, date: date)
+            let date = dictionary["date"] as? String,
+            let id = dictionary["id"] as? Int,
+            let dateSystem = dictionary["dateSystem"] as? Date else {return nil}
+        self.init(title: title, description: description, url: url, urlToImage: urlToImage,content: content, approved: approved, date: date, id: id, dateSystem: dateSystem)
     }
 }

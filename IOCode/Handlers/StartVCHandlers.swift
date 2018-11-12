@@ -44,7 +44,7 @@ extension StartVC: UIImagePickerControllerDelegate, UINavigationControllerDelega
             textField.placeholder = "Email"
         })
         
-        let confirmAction = UIAlertAction(title: "Confirm", style: UIAlertActionStyle.default, handler: { (action) -> Void in
+        let confirmAction = UIAlertAction(title: "Confirm", style: UIAlertAction.Style.default, handler: { (action) -> Void in
             let email = alertPrompt.textFields?.first?.text
             if email!.isEmpty {
                 Alert.showBasic(title: "Hey, first enter email please", msg: "Not possible to continue with your request", vc: self)
@@ -58,7 +58,7 @@ extension StartVC: UIImagePickerControllerDelegate, UINavigationControllerDelega
                 }
             }
         })
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil)
         
         alertPrompt.addAction(confirmAction)
         alertPrompt.addAction(cancelAction)
@@ -218,9 +218,14 @@ extension StartVC: UIImagePickerControllerDelegate, UINavigationControllerDelega
         }
         
         if #available(iOS 10.0, *) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         } else {
             UIApplication.shared.openURL(url)
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

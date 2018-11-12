@@ -19,10 +19,13 @@ class MainTabBar: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewControllers = [createControllers(title: "Main", imageName: "main", vc: mainVC), createControllers(title: "Tutorial", imageName: "tutorialTab", vc: tutorialVC),createControllers(title: "News", imageName: "news", vc: newsVC),createControllers(title: "UI Elements", imageName: "documents", vc: docVC),createControllers(title: "Community", imageName: "community", vc: communityVC)]
-        self.tabBar.barTintColor = UIColor(named: "tabBarColor")
-        self.tabBar.tintColor = UIColor.white.withAlphaComponent(0.5)
-        self.tabBar.unselectedItemTintColor = .white
+        viewControllers = [createControllers(title: "Home", imageName: "main", vc: mainVC), createControllers(title: "Tutorial", imageName: "tutorialTab", vc: tutorialVC),createControllers(title: "News", imageName: "news", vc: newsVC),createControllers(title: "UI Elements", imageName: "documents", vc: docVC),createControllers(title: "Community", imageName: "community", vc: communityVC)]
+        self.tabBar.backgroundImage = UIImage()
+        self.tabBar.backgroundColor = UIColor.darkGray.withAlphaComponent(0.9)
+        self.tabBar.barTintColor = UIColor.darkGray.withAlphaComponent(0.9)
+        
+        self.tabBar.tintColor = .white
+        self.tabBar.unselectedItemTintColor = UIColor.white.withAlphaComponent(0.5)
         navigationController?.isNavigationBarHidden = true
     }
     

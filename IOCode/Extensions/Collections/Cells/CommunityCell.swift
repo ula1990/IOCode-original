@@ -70,7 +70,7 @@ class CommunityCell: UICollectionViewCell {
     
     let profileTitleLabel = MainTitleLabel(text: "Sean Allen", size: 15, textAligment: .left)
     let profilePositionLabel = MainTitleLabel(text: "Youtuber & iOS Developer", size: 15, textAligment: .left)
-    let profileDescText = MainTextView()
+    let profileDescText = NewsTextView()
     
     fileprivate func setpView(){
         contentView.addSubview(shadowView)
@@ -85,8 +85,6 @@ class CommunityCell: UICollectionViewCell {
         shadowView.addSubview(profileImage)
         shadowView.layer.cornerRadius = 50
         profileImage.layer.cornerRadius = 50
-        profileDescText.textAlignment = .left
-        profileDescText.font = UIFont(name: "AppleSDGothicNeo-Light", size: 14)
         style(view: contentView)
         shadowView.topAnchor.constraint(equalTo: self.topAnchor,constant: 20).isActive = true
         shadowView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
@@ -134,7 +132,7 @@ class CommunityCell: UICollectionViewCell {
         profilePositionLabel.topAnchor.constraint(equalTo: profileTitleLabel.bottomAnchor, constant: 5).isActive = true
         profilePositionLabel.leftAnchor.constraint(equalTo: shadowView.rightAnchor, constant: 10).isActive = true
         profilePositionLabel.rightAnchor.constraint(equalTo: instagramButton.leftAnchor, constant: -10).isActive = true
-        profilePositionLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        profilePositionLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         profileDescText.topAnchor.constraint(equalTo: shadowView.bottomAnchor, constant: 15).isActive = true
         profileDescText.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
@@ -175,7 +173,7 @@ class CommunityCell: UICollectionViewCell {
             return
         }
         if #available(iOS 10.0, *) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         } else {
             UIApplication.shared.openURL(url)
         }
@@ -186,7 +184,7 @@ class CommunityCell: UICollectionViewCell {
             return
         }
         if #available(iOS 10.0, *) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         } else {
             UIApplication.shared.openURL(url)
         }
@@ -197,7 +195,7 @@ class CommunityCell: UICollectionViewCell {
             return
         }
         if #available(iOS 10.0, *) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         } else {
             UIApplication.shared.openURL(url)
         }
@@ -208,7 +206,7 @@ class CommunityCell: UICollectionViewCell {
             return
         }
         if #available(iOS 10.0, *) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         } else {
             UIApplication.shared.openURL(url)
         }
@@ -219,7 +217,7 @@ class CommunityCell: UICollectionViewCell {
             return
         }
         if #available(iOS 10.0, *) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
         } else {
             UIApplication.shared.openURL(url)
         }
@@ -239,4 +237,9 @@ class CommunityCell: UICollectionViewCell {
         view.layer.rasterizationScale = UIScreen.main.scale
     }
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

@@ -10,91 +10,140 @@ import UIKit
 
 class NewsDetailsVC: UIViewController {
     
-    let titleLabel = MainTitleLabel(text: "", size: 17, textAligment: .left)
-    let articleImage = NewsImageView(frame: .zero)
-    let descriptionText = MainTextView()
     var receivedArticle: Article?
     
-    lazy var linkButton: UIButton = {
-        let button = UIButton()
+    lazy var mainScrollView: UIScrollView = {
+      let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.contentSize.height = 1200
+        scrollView.backgroundColor = .white
+        return scrollView
+    }()
+    
+    let mainView = ShadowView()
+    
+    lazy var resourceImage: UIImageView = {
+        let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.contentMode = .scaleAspectFit
+        image.clipsToBounds = true
+        image.layer.masksToBounds = true
+        image.image = UIImage(named: "verge")
+        return image
+    }()
+    let resourceName  = MainLabel(text: "The Verge", size: 12, textAligment: .left)
+    let articleDate = MainLabel(text: "Nov 7, 8:44 AM", size: 12, textAligment: .right)
+    let articleTitle = MainLabel(text: "Title will be here", size: 18, textAligment: .center)
+    let articleImage = DescImageView(frame: .zero)
+    let articleDescription = DescTextView(frame: .zero)
+    
+    lazy var articleLink: UIButton = {
+       let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(handleLink), for: .touchUpInside)
         button.contentMode = .scaleAspectFit
+        button.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        button.tintColor = .white
+        button.clipsToBounds = true
+        button.layer.cornerRadius = 5
         button.setImage(UIImage(named: "link"), for: .normal)
-        button.tintColor = UIColor(named: "tabBarColor")
+        button.addTarget(self, action: #selector(handleLink), for: .touchUpInside)
         return button
     }()
     
-    
     fileprivate func setupNavBar(){
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationItem.title = "More"
+        navigationItem.title = "More.."
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.barTintColor = .white
-        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont(name: "AppleSDGothicNeo-Regular", size: 30) ?? UIFont.systemFont(ofSize: 30)]
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black,.font: UIFont(name: "AppleSDGothicNeo-Regular", size: 20) ?? UIFont.systemFont(ofSize: 20)]
+        navigationController?.navigationBar.barTintColor = UIColor(named: "background")
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont(name: "Chalkduster", size: 35) ?? UIFont.systemFont(ofSize: 35)]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black,.font: UIFont(name: "Chalkduster", size: 20) ?? UIFont.systemFont(ofSize: 20)]
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named:"share"), style: .plain, target: self, action: #selector(handleShare))
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(named: "tabBarColor")
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "tabBarColor")
-        navigationController?.navigationBar.tintColor = .black
-        
-    }
-
-    fileprivate func setupView(){
-        view.backgroundColor = .white
-        view.addSubview(titleLabel)
-        view.addSubview(articleImage)
-        view.addSubview(descriptionText)
-        view.addSubview(linkButton)
-        
-        NSLayoutConstraint.activate([
-        titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
-        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        titleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-        titleLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
-        titleLabel.heightAnchor.constraint(equalToConstant: 50),
-        
-        articleImage.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
-        articleImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        articleImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-        articleImage.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
-        articleImage.heightAnchor.constraint(equalToConstant: 200),
-        
-        descriptionText.topAnchor.constraint(equalTo: articleImage.bottomAnchor, constant: 10),
-        descriptionText.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        descriptionText.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-        descriptionText.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
-        descriptionText.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
-            
-        linkButton.bottomAnchor.constraint(equalTo: articleImage.bottomAnchor, constant: -10),
-        linkButton.rightAnchor.constraint(equalTo: articleImage.rightAnchor, constant: -10),
-        linkButton.heightAnchor.constraint(equalToConstant: 25),
-        linkButton.widthAnchor.constraint(equalToConstant: 25)
-        
-        ])
+        navigationController?.navigationBar.tintColor = .darkGray
+        navigationItem.leftBarButtonItem?.tintColor = .darkGray
+        navigationItem.rightBarButtonItem?.tintColor = .darkGray
     }
     
+    fileprivate func setupView(){
+        view.backgroundColor = .white
+        view.addSubview(mainScrollView)
+        mainScrollView.addSubview(mainView)
+        mainView.addSubview(resourceImage)
+        mainView.addSubview(resourceName)
+        mainView.addSubview(articleDate)
+        mainView.addSubview(articleTitle)
+        mainView.addSubview(articleImage)
+        articleImage.addSubview(articleLink)
+        mainView.addSubview(articleDescription)
+        
+        receivedArticle = currentArticle
+        updateViewDetails(article: receivedArticle!)
+        
+        NSLayoutConstraint.activate([
+            
+            mainScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mainScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            mainScrollView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            mainScrollView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            mainScrollView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            
+            
+            mainView.topAnchor.constraint(equalTo: mainScrollView.topAnchor,constant: 20),
+            mainView.heightAnchor.constraint(equalToConstant: 1160),
+            mainView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10),
+            mainView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10),
+            
+            resourceImage.topAnchor.constraint(equalTo: mainView.safeAreaLayoutGuide.topAnchor, constant: 10),
+            resourceImage.leftAnchor.constraint(equalTo: mainView.leftAnchor, constant: 10),
+            resourceImage.heightAnchor.constraint(equalToConstant: 20),
+            resourceImage.widthAnchor.constraint(equalToConstant: 20),
+
+            resourceName.leftAnchor.constraint(equalTo: resourceImage.rightAnchor, constant: 10),
+            resourceName.rightAnchor.constraint(equalTo: mainView.centerXAnchor, constant: -10),
+            resourceName.centerYAnchor.constraint(equalTo: resourceImage.centerYAnchor, constant: 0),
+            resourceName.heightAnchor.constraint(equalToConstant: 20),
+
+            articleDate.leftAnchor.constraint(equalTo: mainView.centerXAnchor, constant: 10),
+            articleDate.rightAnchor.constraint(equalTo: mainView.rightAnchor, constant: -10),
+            articleDate.centerYAnchor.constraint(equalTo: resourceImage.centerYAnchor, constant: 0),
+            articleDate.heightAnchor.constraint(equalToConstant: 20),
+
+            articleTitle.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
+            articleTitle.topAnchor.constraint(equalTo: resourceImage.bottomAnchor, constant: 20),
+            articleTitle.leftAnchor.constraint(equalTo: mainView.leftAnchor, constant: 10),
+            articleTitle.rightAnchor.constraint(equalTo: mainView.rightAnchor, constant: -10),
+            articleTitle.heightAnchor.constraint(equalToConstant: 60),
+            
+            articleImage.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
+            articleImage.topAnchor.constraint(equalTo: articleTitle.bottomAnchor, constant: 20),
+            articleImage.leftAnchor.constraint(equalTo: mainView.leftAnchor, constant: 0),
+            articleImage.rightAnchor.constraint(equalTo: mainView.rightAnchor, constant: 0),
+            articleImage.heightAnchor.constraint(equalToConstant: 150),
+            
+            articleLink.bottomAnchor.constraint(equalTo: articleImage.bottomAnchor, constant: -10),
+            articleLink.rightAnchor.constraint(equalTo: articleImage.rightAnchor, constant: -10),
+            articleLink.heightAnchor.constraint(equalToConstant: 25),
+            articleLink.widthAnchor.constraint(equalToConstant: 25),
+
+            articleDescription.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
+            articleDescription.topAnchor.constraint(equalTo: articleImage.bottomAnchor, constant: 20),
+            articleDescription.leftAnchor.constraint(equalTo: mainView.leftAnchor, constant: 10),
+            articleDescription.rightAnchor.constraint(equalTo: mainView.rightAnchor, constant: -10),
+            articleDescription.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -20)
+
+            ])
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavBar()
         setupView()
-        receivedArticle = currentArticle
-        updateData(article: receivedArticle! )
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        print(self.articleDescription.contentSize.height)
+        print(articleDescription.heightAnchor)
     }
     
-    fileprivate func updateData(article: Article){
-        descriptionText.text = article.content
-        let url = URL(string: article.urlToImage)
-        articleImage.downloadImageFrom(url: url!, imageMode: .scaleAspectFit)
-        titleLabel.text = article.title
+    override func viewWillAppear(_ animated: Bool) {
+        setupNavBar()
     }
-
-
 }

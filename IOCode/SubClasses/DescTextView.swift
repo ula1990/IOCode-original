@@ -1,16 +1,14 @@
 //
-//  CommentTextView.swift
-//  Leeroy Crew
+//  DescTextView.swift
+//  DN News
 //
-//  Created by Uladzislau Daratsiuk on 7/30/18.
+//  Created by Uladzislau Daratsiuk on 11/7/18.
 //  Copyright © 2018 Uladzislau Daratsiuk. All rights reserved.
 //
 
 import UIKit
 
-class MainTextView: UITextView {
-    
-    let mainTextSize: CGFloat = 14
+class DescTextView: UITextView {
 
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
@@ -27,10 +25,12 @@ class MainTextView: UITextView {
         self.textColor = UIColor.darkGray
         self.backgroundColor = UIColor.white.withAlphaComponent(0)
         self.isEditable = false
+        self.font = UIFont.systemFont(ofSize: 14)
+        self.setContentOffset(CGPoint.zero, animated: true)
         let spacing = NSMutableParagraphStyle()
         spacing.lineSpacing = 7
-        spacing.alignment = .left
-        self.typingAttributes = [NSAttributedStringKey.paragraphStyle.rawValue: spacing,
-                                 NSAttributedStringKey.font.rawValue: UIFont(name: "AppleSDGothicNeo-Light", size: mainTextSize) ?? UIFont.systemFont(ofSize: mainTextSize)]
+        let attr = [NSAttributedString.Key.paragraphStyle : spacing, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]
+        self.typingAttributes = attr
+
     }
 }

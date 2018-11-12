@@ -34,10 +34,9 @@ extension MainVC {
         fetchUserAndSetupNavBarTitle()
     }
     
-    @objc public func handleShare(){
-        let activityVC = UIActivityViewController(activityItems: ["You can learn more about Swift in IOCode app."], applicationActivities: nil)
-        activityVC.popoverPresentationController?.sourceView = self.view
-        self.present(activityVC, animated: true, completion: nil)
+    @objc public func handleProfile(){
+        let vc = ProfileVC()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc public func fetchUserAndSetupNavBarTitle(){
@@ -49,6 +48,7 @@ extension MainVC {
             if let document = document, document.exists {
                 let dataDescription = document.data()
                 let user = UserModel(dictionary: dataDescription!)
+                currentUser = user
                 self.navigationItem.title = "Hi,\(user?.name ?? "there")"
             }else{
                 self.fetchUserAndSetupNavBarTitle()

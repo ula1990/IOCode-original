@@ -13,9 +13,9 @@ class MainLabel: UILabel {
     init(text: String, size: CGFloat, textAligment: NSTextAlignment) {
         super.init(frame: .zero)
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.textColor = .black
+        self.textColor = .darkGray
         self.textAlignment = textAligment
-        self.font = UIFont(name: "AppleSDGothicNeo-UltraLight", size: size)
+        self.font = UIFont.systemFont(ofSize: size)
         self.text = text
         self.numberOfLines = 4
         self.adjustsFontSizeToFitWidth = true
@@ -42,7 +42,7 @@ class MainLabel: UILabel {
                 attributedString = NSMutableAttributedString(string: labelText)
             }
 
-            attributedString.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))
+            attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, attributedString.length))
             self.attributedText = attributedString
         }
     

@@ -7,22 +7,25 @@
 //
 
 import UIKit
-import FirebaseFirestore
+import Firebase
 
 var currentArticle: Article?
 
 class NewsVC: UIViewController {
     
-    let newsCellId = "newsCellId"
+    let feedCellId = "feedCellId"
     var listOfArticle = [Article]()
     var filtredArticle = [Article]()
     let activityIndicator = MainActivityIndicator(frame: .zero)
-    let noDataLabel = MainLabel(text: "No data to display", size: 12, textAligment: .center)
+    let noDataLabel = MainLabel(text: "Updating...", size: 12, textAligment: .center)
     let searchBar = MainSearchBar()
     var isSearching = false
     var db: Firestore!
+    var lastDocumentSnapshot: DocumentSnapshot?
+    var fetchingMore = false
+    let settings = FirestoreSettings()
     
-    lazy var newsCollection: UICollectionView = {
+    lazy var feedCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let view = UICollectionView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), collectionViewLayout: layout)
         layout.scrollDirection = .vertical
@@ -30,50 +33,36 @@ class NewsVC: UIViewController {
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 15
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.register(NewsCell.self, forCellWithReuseIdentifier: newsCellId)
+        view.register(FeedCell.self, forCellWithReuseIdentifier: feedCellId)
         view.isScrollEnabled = true
         view.backgroundColor = .white
+        view.alwaysBounceVertical = true
         return view
     }()
-
+    
     fileprivate func setupNavBar(){
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationItem.title = "News"
+        navigationItem.title = "Feed"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.barTintColor = .white
-        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont(name: "AppleSDGothicNeo-Regular", size: 30) ?? UIFont.systemFont(ofSize: 30)]
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black,.font: UIFont(name: "AppleSDGothicNeo-Regular", size: 20) ?? UIFont.systemFont(ofSize: 20)]
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named:"download"), style: .plain, target: self, action: #selector(observeArticles))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named:"add"), style: .plain, target: self, action: #selector(addArticleToDb))
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(named: "tabBarColor")
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "tabBarColor")
-        navigationController?.navigationBar.tintColor = .black
-    }
-    
-    fileprivate func toolBarSetup() {
-        let toolBar = UIToolbar()
-        toolBar.sizeToFit()
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.finishedWithInput))
-        doneButton.tintColor = .black
-        toolBar.setItems([flexibleSpace, doneButton], animated: true)
-        searchBar.inputAccessoryView = toolBar
+        navigationController?.navigationBar.barTintColor = UIColor(named: "background")
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont(name: "Chalkduster", size: 35) ?? UIFont.systemFont(ofSize: 35)]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black,.font: UIFont(name: "Chalkduster", size: 20) ?? UIFont.systemFont(ofSize: 20)]
     }
     
     fileprivate func setupView(){
         view.backgroundColor = .white
         view.addSubview(searchBar)
-        view.addSubview(newsCollection)
+        view.addSubview(feedCollection)
         view.addSubview(noDataLabel)
-        newsCollection.addSubview(activityIndicator)
+        view.addSubview(activityIndicator)
         noDataLabel.isHidden = true
         searchBar.delegate = self
+        feedCollection.delegate = self
+        feedCollection.dataSource = self
         
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.font.rawValue: UIFont(name: "AppleSDGothicNeo-Light", size: 15) ?? UIFont.systemFont(ofSize: 15)]
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue:UIColor.gray]
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search..", attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search..", attributes: [NSAttributedStringKey.font: UIFont(name: "AppleSDGothicNeo-Light", size: 15) ?? UIFont.systemFont(ofSize: 15)])
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search..", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search..", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)])
         
         NSLayoutConstraint.activate([
             
@@ -83,21 +72,22 @@ class NewsVC: UIViewController {
             searchBar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             searchBar.heightAnchor.constraint(equalToConstant: 50),
             
-            newsCollection.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            newsCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10),
-            newsCollection.leftAnchor.constraint(equalTo: view.leftAnchor),
-            newsCollection.rightAnchor.constraint(equalTo: view.rightAnchor),
-            newsCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            feedCollection.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            feedCollection.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 10),
+            feedCollection.leftAnchor.constraint(equalTo: view.leftAnchor),
+            feedCollection.rightAnchor.constraint(equalTo: view.rightAnchor),
+            feedCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            noDataLabel.centerXAnchor.constraint(equalTo: newsCollection.centerXAnchor),
-            noDataLabel.centerYAnchor.constraint(equalTo: newsCollection.centerYAnchor, constant: -30),
+            noDataLabel.centerXAnchor.constraint(equalTo: feedCollection.centerXAnchor),
+            noDataLabel.centerYAnchor.constraint(equalTo: feedCollection.centerYAnchor, constant: -30),
             noDataLabel.heightAnchor.constraint(equalToConstant: 20),
             noDataLabel.widthAnchor.constraint(equalToConstant: 150),
             
-            activityIndicator.centerXAnchor.constraint(equalTo: newsCollection.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: newsCollection.centerYAnchor),
+            activityIndicator.centerXAnchor.constraint(equalTo: feedCollection.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: feedCollection.centerYAnchor),
             activityIndicator.heightAnchor.constraint(equalToConstant: 30),
             activityIndicator.widthAnchor.constraint(equalToConstant: 30)
+            
             ])
     }
     
@@ -105,21 +95,12 @@ class NewsVC: UIViewController {
         super.viewDidLoad()
         setupView()
         setupNavBar()
-        toolBarSetup()
-        newsCollection.delegate = self
-        newsCollection.dataSource = self
         db = Firestore.firestore()
         observeArticles()
-        checkForUpdates()
-
+        //        checkForUpdates()
+            tempFunc()
     }
     
     
-    override func viewWillAppear(_ animated: Bool) {
-        observeArticles()
-    }
-    
-//    override func viewWillDisappear(_ animated: Bool) {
-//        newsCollection.reloadData()
-//    }
 }
+

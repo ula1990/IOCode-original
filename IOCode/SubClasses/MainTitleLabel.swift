@@ -15,7 +15,7 @@ class MainTitleLabel: UILabel {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textColor = .black
         self.textAlignment = textAligment
-        self.font = UIFont(name: "AppleSDGothicNeo-Regular", size: size)
+        self.font = UIFont.systemFont(ofSize: size)
         self.text = text
         self.numberOfLines = 4
         self.adjustsFontSizeToFitWidth = true

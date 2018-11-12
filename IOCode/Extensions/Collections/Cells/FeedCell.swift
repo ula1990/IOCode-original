@@ -1,52 +1,61 @@
 //
-//  UiCell.swift
+//  NewsCell.swift
 //  IOCode
 //
-//  Created by Uladzislau Daratsiuk on 10/9/18.
+//  Created by Uladzislau Daratsiuk on 9/18/18.
 //  Copyright © 2018 Uladzislau Daratsiuk. All rights reserved.
 //
 
 import UIKit
 
-class UiCell: UICollectionViewCell {
-    let uiImage = NewsImageView(frame: .zero)
-    let uiTitle = NewsTextView()
+class FeedCell: UICollectionViewCell {
+ 
+    let articleImage = NewsImageView(frame: .zero)
+    let articleTitle = NewsTextView()
+    let articleDate = MainLabel(text: "Date:", size: 12, textAligment: .left)
     lazy var seperatorView: UIView = {
-        let view = UIView()
+       let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor.gray.withAlphaComponent(0.1)
         return view
     }()
     lazy var resourceImage: UIImageView = {
-        let image = UIImageView()
+       let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFit
         image.clipsToBounds = true
         image.layer.masksToBounds = true
-        image.image = UIImage(named: "swift")
+        image.image = UIImage(named: "verge")
         return image
     }()
-    let resourceName  = MainLabel(text: "", size: 12, textAligment: .left)
+    let resourceName  = MainLabel(text: "The Verge", size: 12, textAligment: .left)
     
     fileprivate func setupView(){
-        contentView.addSubview(uiImage)
-        contentView.addSubview(uiTitle)
+        contentView.addSubview(articleImage)
+        contentView.addSubview(articleTitle)
+        contentView.addSubview(articleDate)
         contentView.addSubview(seperatorView)
         contentView.addSubview(resourceName)
         contentView.addSubview(resourceImage)
         
+        articleDate.textColor = UIColor.gray.withAlphaComponent(0.5)
         style(view: contentView)
         NSLayoutConstraint.activate([
             
-            uiImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 30),
-            uiImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10),
-            uiImage.widthAnchor.constraint(equalToConstant: 60),
-            uiImage.heightAnchor.constraint(equalToConstant: 60),
+            articleImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 30),
+            articleImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10),
+            articleImage.widthAnchor.constraint(equalToConstant: 60),
+            articleImage.heightAnchor.constraint(equalToConstant: 60),
             
-            uiTitle.topAnchor.constraint(equalTo: uiImage.topAnchor, constant: 0),
-            uiTitle.leftAnchor.constraint(equalTo: uiImage.rightAnchor, constant: 10),
-            uiTitle.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5),
-            uiTitle.bottomAnchor.constraint(equalTo: uiImage.bottomAnchor, constant: 0),
+            articleTitle.topAnchor.constraint(equalTo: articleImage.topAnchor, constant: 0),
+            articleTitle.leftAnchor.constraint(equalTo: articleImage.rightAnchor, constant: 10),
+            articleTitle.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5),
+            articleTitle.bottomAnchor.constraint(equalTo: articleImage.bottomAnchor, constant: 0),
+            
+            articleDate.rightAnchor.constraint(equalTo: self.centerXAnchor, constant: 0),
+            articleDate.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
+            articleDate.heightAnchor.constraint(equalToConstant: 20),
+            articleDate.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10),
             
             seperatorView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 100),
             seperatorView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
@@ -67,11 +76,14 @@ class UiCell: UICollectionViewCell {
         
     }
     
-    public func updateData(element: UiElement){
-        uiTitle.text = "UIKit Element: \(element.name!)"
-        uiImage.image = UIImage(named: "uielements")
-        resourceName.text = element.version
-        uiImage.contentMode = .scaleAspectFit
+    public func updateData(article: Article){
+        articleTitle.text = article.title
+        let imageURL = URL(string: article.urlToImage)
+        articleImage.downloadImageFrom(url: imageURL!, imageMode: .scaleAspectFit)
+        articleImage.contentMode = .scaleAspectFill
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, h:mm a"
+        articleDate.text = dateFormatter.string(from: article.dateSystem)
     }
     
     override init(frame: CGRect) {
@@ -86,15 +98,14 @@ class UiCell: UICollectionViewCell {
     fileprivate func style(view: UIView) {
         view.layer.masksToBounds = false
         view.backgroundColor = .white
-        view.layer.cornerRadius = 5
+        view.layer.cornerRadius = 10
 //        view.layer.shadowColor = UIColor(named: "tabBarColor")?.cgColor
         view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOffset = CGSize(width: 1, height: 5)
-        view.layer.shadowRadius = 8
+        view.layer.shadowOffset = CGSize(width: 1, height: 3)
+        view.layer.shadowRadius = 4
         view.layer.shadowOpacity = 0.2
-        view.layer.shadowPath = UIBezierPath(roundedRect: view.bounds, byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 14, height: 14)).cgPath
+        view.layer.shadowPath = UIBezierPath(roundedRect: view.bounds, byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 10, height: 10)).cgPath
         view.layer.shouldRasterize = true
         view.layer.rasterizationScale = UIScreen.main.scale
     }
-    
 }

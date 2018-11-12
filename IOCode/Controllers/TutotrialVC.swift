@@ -17,6 +17,7 @@ class TutotrialVC: UIViewController {
     var isSearching = false
     var detailsShowing = false
     var detailsHeightAnchor: NSLayoutConstraint?
+    var fetchingMore = false
     
     let activityIndicator = MainActivityIndicator(frame: .zero)
     let searchBar = MainSearchBar()
@@ -29,8 +30,6 @@ class TutotrialVC: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
         view.layer.cornerRadius = 5
-        view.layer.borderColor = UIColor(named: "tabBarColor")?.cgColor
-        view.layer.borderWidth = 2
         return view
     }()
     
@@ -45,6 +44,7 @@ class TutotrialVC: UIViewController {
         view.register(TutorialCell.self, forCellWithReuseIdentifier: tutorialCellId)
         view.isScrollEnabled = true
         view.backgroundColor = .white
+        view.alwaysBounceVertical = true
         return view
     }()
     
@@ -54,19 +54,16 @@ class TutotrialVC: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.barTintColor = .white
-        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont(name: "AppleSDGothicNeo-Regular", size: 30) ?? UIFont.systemFont(ofSize: 30)]
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black,.font: UIFont(name: "AppleSDGothicNeo-Regular", size: 20) ?? UIFont.systemFont(ofSize: 20)]
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named:"download"), style: .plain, target: self, action: #selector(reload))
-        navigationItem.leftBarButtonItem?.tintColor = UIColor.darkGray
-        navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "tabBarColor")
-        navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont(name: "Chalkduster", size: 30) ?? UIFont.systemFont(ofSize: 30)]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black,.font: UIFont(name: "Chalkduster", size: 20) ?? UIFont.systemFont(ofSize: 20)]
+        navigationController?.navigationBar.tintColor = .darkGray
     }
     
     fileprivate func toolBarSetup() {
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.finishedWithInput))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: self, action: #selector(self.finishedWithInput))
         doneButton.tintColor = .black
         toolBar.setItems([flexibleSpace, doneButton], animated: true)
         searchBar.inputAccessoryView = toolBar
@@ -83,10 +80,10 @@ class TutotrialVC: UIViewController {
         noDataLabel.isHidden = true
         
         
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.font.rawValue: UIFont(name: "AppleSDGothicNeo-Light", size: 15) ?? UIFont.systemFont(ofSize: 15)]
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue:UIColor.gray]
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search..", attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search..", attributes: [NSAttributedStringKey.font: UIFont(name: "AppleSDGothicNeo-Light", size: 15) ?? UIFont.systemFont(ofSize: 15)])
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = convertToNSAttributedStringKeyDictionary([NSAttributedString.Key.font.rawValue: UIFont.systemFont(ofSize: 14)])
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = convertToNSAttributedStringKeyDictionary([NSAttributedString.Key.foregroundColor.rawValue:UIColor.gray])
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search..", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search..", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)])
         
         detailsHeightAnchor = detailsView.heightAnchor.constraint(equalToConstant: 0)
         detailsHeightAnchor?.isActive = true
@@ -153,4 +150,9 @@ class TutotrialVC: UIViewController {
         super.viewWillAppear(true)
         loadTutorial(apiKey: apiKey)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToNSAttributedStringKeyDictionary(_ input: [String: Any]) -> [NSAttributedString.Key: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }

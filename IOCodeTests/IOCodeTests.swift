@@ -7,6 +7,8 @@
 //
 
 import XCTest
+import Firebase
+
 @testable import IOCode
 
 class IOCodeTests: XCTestCase {

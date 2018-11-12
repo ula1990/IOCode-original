@@ -15,10 +15,6 @@ extension TutotrialVC {
         view.endEditing(true)
     }
     
-    @objc public func reload(){
-        loadTutorial(apiKey: apiKey)
-    }
-    
     public func handleDetails(tutorial: Tutorial){
         UIView.animate(withDuration: 0.3, animations: {
             self.detailsHeightAnchor?.isActive = false

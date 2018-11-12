@@ -11,8 +11,28 @@
 		</dict>
 		<key>IOCode.xcscheme_^#shared#^_</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
-			<integer>19</integer>
+			<integer>22</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>C0F5B4652111E80A00BB540D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C0F5B4792111E80D00BB540D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C0F5B4842111E80D00BB540D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

@@ -9,8 +9,6 @@
 import UIKit
 
 class NewsTextView: UITextView {
-
-    let mainTextSize: CGFloat = 15
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
@@ -27,14 +25,9 @@ class NewsTextView: UITextView {
         self.textColor = UIColor.darkGray
         self.backgroundColor = UIColor.white.withAlphaComponent(0)
         self.isEditable = false
-        let spacing = NSMutableParagraphStyle()
-        spacing.lineSpacing = 7
-        spacing.alignment = .center
-        self.typingAttributes = [NSAttributedStringKey.paragraphStyle.rawValue: spacing,
-                                 NSAttributedStringKey.font.rawValue: UIFont(name: "AppleSDGothicNeo-Light", size: mainTextSize) ?? UIFont.systemFont(ofSize: mainTextSize)]
-        self.layer.borderColor = UIColor(named: "tabBarColor")?.cgColor
-        self.layer.borderWidth = 2
-        self.layer.cornerRadius = 5
+        self.font = UIFont.systemFont(ofSize: 14)
+        self.isUserInteractionEnabled = false
+        self.setContentOffset(CGPoint.zero, animated: true)
     }
     
 }

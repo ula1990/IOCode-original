@@ -1,13 +1,14 @@
 //
-//  NewsCollectionExt.swift
-//  IOCode
+//  MainVCCollectionExt.swift
+//  DN News
 //
-//  Created by Uladzislau Daratsiuk on 9/18/18.
+//  Created by Uladzislau Daratsiuk on 11/6/18.
 //  Copyright © 2018 Uladzislau Daratsiuk. All rights reserved.
 //
 
 import Foundation
 import UIKit
+import Firebase
 
 extension NewsVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -19,11 +20,11 @@ extension NewsVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
             }
         }else{
             if listOfArticle.isEmpty {
-                newsCollection.isHidden = true
+                feedCollection.isHidden = true
                 noDataLabel.isHidden = false
                 return 0
             }else{
-                newsCollection.isHidden = false
+                feedCollection.isHidden = false
                 noDataLabel.isHidden = true
                 return listOfArticle.count
             }
@@ -32,14 +33,18 @@ extension NewsVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let article: Article
-        let cell = newsCollection.dequeueReusableCell(withReuseIdentifier: newsCellId, for: indexPath) as! NewsCell
+        let cell = feedCollection.dequeueReusableCell(withReuseIdentifier: feedCellId, for: indexPath) as! FeedCell
         if isSearching{
             article = filtredArticle[indexPath.row]
+            cell.updateData(article: article)
         }else{
-            article = listOfArticle[indexPath.row]
+            if !listOfArticle.isEmpty {
+                article = listOfArticle[indexPath.row]
+                cell.updateData(article: article)
+            }
         }
         cell.backgroundColor = UIColor.white.withAlphaComponent(0)
-        cell.updateData(article: article)
+        
         return cell
     }
     
@@ -52,7 +57,7 @@ extension NewsVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: view.frame.width - 40, height: 65)
+        return CGSize(width: view.frame.width - 40, height: 140)
     }
     
     
@@ -65,11 +70,11 @@ extension NewsVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         if searchBar.text == nil || searchBar.text == "" {
             isSearching = false
             view.endEditing(true)
-            newsCollection.reloadData()
+            feedCollection.reloadData()
         }else{
             isSearching = true
             filtredArticle = listOfArticle.filter({$0.title.range(of: searchBar.text!, options: .caseInsensitive) != nil})
-            newsCollection.reloadData()
+            feedCollection.reloadData()
         }
     }
     
@@ -77,4 +82,24 @@ extension NewsVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         isSearching = false
         self.searchBar.endEditing(true)
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        if offsetY > contentHeight - scrollView.frame.height - 50 {
+            // Bottom of the screen is reached
+            if !fetchingMore {
+                observeArticles()
+            }
+        }else if offsetY < -100 {
+            self.listOfArticle.removeAll()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                if !self.fetchingMore {
+                    self.observeArticles()
+                }
+                
+            })
+        }
+    }
+    
 }

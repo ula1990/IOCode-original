@@ -84,6 +84,26 @@ class FeedCell: UICollectionViewCell {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, h:mm a"
         articleDate.text = dateFormatter.string(from: article.dateSystem)
+        
+        if article.resource == "verge" {
+            resourceImage.image = UIImage(named: "verge")
+            resourceName.text = "The Verge"
+        }else if article.resource == "techcrunch" {
+            resourceImage.image = UIImage(named: "techcrunch")
+            resourceName.text = "TechCrunch"
+        }else if article.resource == "9to5" {
+            resourceImage.image = UIImage(named: "9to5")
+            resourceName.text = "9to5mac"
+        }else if article.resource == "macrumors" {
+            resourceImage.image = UIImage(named: "macrumors")
+            resourceName.text = "MacRumors"
+        }else if article.resource == "appleinsider" {
+            resourceImage.image = UIImage(named: "appleinsider")
+            resourceName.text = "appleinsider"
+        }else{
+            resourceImage.image = UIImage(named: "noimage")
+            resourceName.text = "Unknown"
+        }
     }
     
     override init(frame: CGRect) {

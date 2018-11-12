@@ -18,7 +18,7 @@ class ProfileVC: UIViewController {
     lazy var mainScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.contentSize.height = 600
+        scrollView.contentSize.height = 500
         scrollView.backgroundColor = .white
         return scrollView
     }()

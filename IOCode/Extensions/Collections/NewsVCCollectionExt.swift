@@ -93,7 +93,6 @@ extension NewsVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
             }
         }else if offsetY < -100 {
             self.listOfArticle.removeAll()
-            self.feedCollection.reloadData()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 if !self.fetchingMore {
                     self.observeArticles()

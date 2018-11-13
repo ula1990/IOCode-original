@@ -55,7 +55,7 @@ class NewsDetailsVC: UIViewController {
         navigationItem.title = "More.."
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.barTintColor = UIColor(named: "background")
+        navigationController?.navigationBar.barTintColor = .white
         navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black, .font: UIFont(name: "Chalkduster", size: 35) ?? UIFont.systemFont(ofSize: 35)]
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black,.font: UIFont(name: "Chalkduster", size: 20) ?? UIFont.systemFont(ofSize: 20)]
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named:"share"), style: .plain, target: self, action: #selector(handleShare))
@@ -73,23 +73,23 @@ class NewsDetailsVC: UIViewController {
         mainView.addSubview(articleDate)
         mainView.addSubview(articleTitle)
         mainView.addSubview(articleImage)
-        articleImage.addSubview(articleLink)
+        mainView.addSubview(articleLink)
         mainView.addSubview(articleDescription)
-        
+        articleDescription.isScrollEnabled = false
+        articleDescription.delegate = self
         receivedArticle = currentArticle
         updateViewDetails(article: receivedArticle!)
         
         NSLayoutConstraint.activate([
             
             mainScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            mainScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            mainScrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 10),
             mainScrollView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             mainScrollView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             mainScrollView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             
-            
             mainView.topAnchor.constraint(equalTo: mainScrollView.topAnchor,constant: 20),
-            mainView.heightAnchor.constraint(equalToConstant: 1160),
+            mainView.bottomAnchor.constraint(equalTo: articleDescription.bottomAnchor, constant: 10),
             mainView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10),
             mainView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10),
             
@@ -129,18 +129,18 @@ class NewsDetailsVC: UIViewController {
             articleDescription.topAnchor.constraint(equalTo: articleImage.bottomAnchor, constant: 20),
             articleDescription.leftAnchor.constraint(equalTo: mainView.leftAnchor, constant: 10),
             articleDescription.rightAnchor.constraint(equalTo: mainView.rightAnchor, constant: -10),
-            articleDescription.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: -20)
+            articleDescription.heightAnchor.constraint(equalToConstant: 400),
 
             ])
-        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: {
+            self.textViewDidChange(self.articleDescription)
+        })
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavBar()
         setupView()
-        print(self.articleDescription.contentSize.height)
-        print(articleDescription.heightAnchor)
     }
     
     override func viewWillAppear(_ animated: Bool) {

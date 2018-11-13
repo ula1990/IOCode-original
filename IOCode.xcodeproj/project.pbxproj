@@ -245,6 +245,26 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		C04067842199D50500BD97AF /* UILabels */ = {
+			isa = PBXGroup;
+			children = (
+				C0FDFB292113250E00B202D9 /* MainLabel.swift */,
+				C0BECB43214FE46B001E2B1A /* MainTitleLabel.swift */,
+			);
+			path = UILabels;
+			sourceTree = "<group>";
+		};
+		C04067852199D52600BD97AF /* UIImage */ = {
+			isa = PBXGroup;
+			children = (
+				C06D5D1121511387009AE39F /* LoginFieldsImage.swift */,
+				C0416C8E2148F10D00AAA185 /* NewsImageView.swift */,
+				C0416C88214850E200AAA185 /* MainImageView.swift */,
+				C0E64ACB2199785400922791 /* DescImageView.swift */,
+			);
+			path = UIImage;
+			sourceTree = "<group>";
+		};
 		C06D5D0A2150DE41009AE39F /* Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -356,19 +376,15 @@
 			isa = PBXGroup;
 			children = (
 				C0BE190F214FA29500F2EF2B /* UISearchBar */,
-				C0FDFB292113250E00B202D9 /* MainLabel.swift */,
-				C0BECB43214FE46B001E2B1A /* MainTitleLabel.swift */,
+				C04067842199D50500BD97AF /* UILabels */,
+				C04067852199D52600BD97AF /* UIImage */,
 				C0416C8621483BF300AAA185 /* MainActivityIndicator.swift */,
-				C0416C8E2148F10D00AAA185 /* NewsImageView.swift */,
-				C0416C88214850E200AAA185 /* MainImageView.swift */,
 				C0BECB33214FC9BC001E2B1A /* ShadowView.swift */,
 				C0135121216E2B5B00C48F31 /* NewsTextView.swift */,
 				C06D5D0D2150FC1A009AE39F /* MainTextField.swift */,
 				C01351272170CCFE00C48F31 /* ActionButton.swift */,
-				C0E64ACB2199785400922791 /* DescImageView.swift */,
 				C0E64ACC2199785500922791 /* DescTextView.swift */,
 				C06D5D0F2150FCB7009AE39F /* MainSeperatorView.swift */,
-				C06D5D1121511387009AE39F /* LoginFieldsImage.swift */,
 			);
 			path = SubClasses;
 			sourceTree = "<group>";

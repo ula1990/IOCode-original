@@ -13,7 +13,7 @@ class AboutVC: UIViewController {
     let mainView = ShadowView()
     let titleLabel = MainTitleLabel(text: "Developed by monkey for developers.", size: 17, textAligment: .center)
     let mainImage = MainImageView(imageName: "monkey")
-    let hintLabel = MainLabel(text: "In order if you want to help us to improve our application you can contact with us in the next ways:", size: 15, textAligment: .center)
+    let hintLabel = MainLabel(text: "In order if you want to help us to improve our application you can contact with us in the next ways:", size: 14, textAligment: .center)
     let patreonButton = ActionButton(url: "https://www.patreon.com/ula", image: "patreon")
     let slackButton = ActionButton(url: "https://iosdeveloperula.slack.com/", image: "slack")
     let twitterButton = ActionButton(url: "https://twitter.com/daratsiuk", image: "twitter")

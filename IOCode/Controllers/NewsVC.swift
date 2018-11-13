@@ -98,7 +98,7 @@ class NewsVC: UIViewController {
         db = Firestore.firestore()
         observeArticles()
         //        checkForUpdates()
-            tempFunc()
+//            tempFunc()
     }
     
     

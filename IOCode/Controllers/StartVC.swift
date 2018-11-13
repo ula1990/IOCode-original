@@ -96,6 +96,7 @@ class StartVC: UIViewController {
         view.setAnimation(named: "personal_character")
         view.loopAnimation = true
         view.play()
+        view.contentMode = .scaleAspectFit
         return view
     }()
 
@@ -212,7 +213,7 @@ class StartVC: UIViewController {
         mainIcon.topAnchor.constraint(equalTo: forgotPasswordButton.bottomAnchor, constant: 20).isActive = true
         mainIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         mainIcon.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        mainIcon.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        mainIcon.bottomAnchor.constraint(equalTo: privacyButton.topAnchor, constant: -10).isActive = true
 
         privacyButton.heightAnchor.constraint(equalToConstant: 15).isActive = true
         privacyButton.bottomAnchor.constraint(equalTo: versionLabel.topAnchor, constant: -10).isActive = true

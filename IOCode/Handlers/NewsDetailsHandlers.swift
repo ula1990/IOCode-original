@@ -9,7 +9,21 @@
 import Foundation
 import UIKit
 
-extension NewsDetailsVC {
+extension NewsDetailsVC: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let size = CGSize(width: mainView.frame.width, height: .infinity)
+        let estimatedSize = textView.sizeThatFits(size)
+        textView.constraints.forEach { (constraint) in
+            if constraint.firstAttribute == .height {
+                constraint.constant = estimatedSize.height
+                mainScrollView.contentSize.height = 400 + estimatedSize.height
+            }
+            
+        }
+        
+    }
+    
     public func updateViewDetails(article: Article){
         let imageURL = URL(string: article.urlToImage)
         articleImage.downloadImageFrom(url: imageURL!, imageMode: .scaleAspectFit)
@@ -48,6 +62,8 @@ extension NewsDetailsVC {
     }
     
     @objc public func handleLink(){
+        print(currentArticle?.url)
+        print(receivedArticle!.url)
         guard let url = URL(string: receivedArticle!.url) else {
             return
         }
@@ -59,7 +75,7 @@ extension NewsDetailsVC {
     }
 }
 
-// Helper function inserted by Swift 4.2 migrator.
+
 fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
-	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
+    return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

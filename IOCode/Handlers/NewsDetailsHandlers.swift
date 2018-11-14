@@ -19,9 +19,7 @@ extension NewsDetailsVC: UITextViewDelegate {
                 constraint.constant = estimatedSize.height
                 mainScrollView.contentSize.height = 400 + estimatedSize.height
             }
-            
         }
-        
     }
     
     public func updateViewDetails(article: Article){
@@ -62,8 +60,6 @@ extension NewsDetailsVC: UITextViewDelegate {
     }
     
     @objc public func handleLink(){
-        print(currentArticle?.url)
-        print(receivedArticle!.url)
         guard let url = URL(string: receivedArticle!.url) else {
             return
         }

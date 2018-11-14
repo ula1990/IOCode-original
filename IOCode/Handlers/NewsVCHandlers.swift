@@ -62,11 +62,11 @@ extension NewsVC {
     
     
     @objc public func freshUpdateArticles(){
-        if fetchingMore {
+        if fetchingMore{
             return
         }
-        
         self.listOfArticle.removeAll()
+        self.feedCollection.reloadData()
         self.lastDocumentSnapshot = nil
         fetchingMore = true
         activityIndicator.isHidden = false
